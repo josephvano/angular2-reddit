@@ -1,6 +1,26 @@
 import { bootstrap }  from "angular2/platform/browser";
 import { Component }  from "angular2/core";
 
+class Article{
+  title: string;
+  link: string;
+  votes: number;
+
+  constructor(title: string, link: string, votes?: number){
+    this.title = title;
+    this.link = link;
+    this.votes = votes || 0;
+  }
+
+  voteUp(): void{
+    this.votes+=1;
+  }
+
+  voteDown(): void{
+    this.votes-=1;
+  }
+}
+
 
 @Component({
   selector: 'reddit-article',
@@ -10,14 +30,14 @@ import { Component }  from "angular2/core";
   template: `
     <div class="four wide column center aligned votes">
       <div class="ui statistic">
-        <div class="value"> {{ votes }} </div>
+        <div class="value"> {{ article.votes }} </div>
         <div class="label"> Points </div>
       </div>
     </div>
 
     <div class="twelve wide column">
 
-      <a class="ui large header" href="{{ link }}"> {{ title }} </a>
+      <a class="ui large header" href="{{ article.link }}"> {{ article.title }} </a>
       <ul class="ui big horizontal list voters">
         <li class="item">
           <a href (click)="voteUp()">
@@ -35,24 +55,19 @@ import { Component }  from "angular2/core";
 
 })
 class ArticleComponent{
-  votes: number;
-  title: string;
-  link: string;
 
   constructor(){
-    this.title = "Angular 2";
-    this.link = "http://angular.io";
-    this.votes = 10;
+    this.article = new Article('Angular 2', 'http://angular.io', 10);
   }
 
   voteUp(): boolean{
-    this.votes+=1;
+    this.article.voteUp();
 
     return false;
   }
 
   voteDown(): boolean{
-    this.votes-=1;
+    this.article.voteDown();
 
     return false;
   }
